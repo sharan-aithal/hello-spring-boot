@@ -12,7 +12,7 @@ ARG VERSION=0.0.1
 VOLUME demoappvol
 
 # Add the service as demoapp.jar
-ADD ./target/demo-${VERSION}-SNAPSHOT.jar demoapp.jar
+ADD ./target/hello-spring-boot-${VERSION}-SNAPSHOT.jar demoapp.jar
 
 # touch the archive for timestamp
 RUN sh -c 'touch /demoapp.jar'
