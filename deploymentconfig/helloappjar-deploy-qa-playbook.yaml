@@ -1,0 +1,44 @@
+---
+- hosts: all
+  tasks:
+    - name: create deployment folders
+      command: mkdir -p /home/ubuntu/deploy-hellojar/deploymentconfig
+      ignore_errors: True
+
+    - name: copy helloappjar
+      copy:
+        src: /home/ubuntu/deploy-hellojar/deploymentconfig/target
+        dest: /home/ubuntu/deploy-hellojar/deploymentconfig/
+
+    - name: copy helloappjar Dockerfile
+      copy:
+        src: /home/ubuntu/deploy-hellojar/deploymentconfig/Dockerfile
+        dest: /home/ubuntu/deploy-hellojar/deploymentconfig/
+    
+    - name: copy helloappjar docker-compose yml
+      copy:
+        src: /home/ubuntu/deploy-hellojar/deploymentconfig/helloappjar-docker-compose.yml
+        dest: /home/ubuntu/deploy-hellojar/deploymentconfig/
+    
+    - name: copy helloappjar settings .env file
+      copy:
+        src: /home/ubuntu/deploy-hellojar/deploymentconfig/helloappjar.settings.qa.env
+        dest: /home/ubuntu/deploy-hellojar/deploymentconfig/
+    
+    - name: stop running helloappjar container
+      command: sudo docker container stop helloappjar
+      ignore_errors: True
+
+    - name: remove existing helloappjar container
+      command: sudo docker container rm helloappjar
+      ignore_errors: True
+
+    - name: remove existing helloappjar image
+      command: sudo docker rmi helloappjar --force
+      ignore_errors: True
+
+    - name: build image of helloappjar using the dockerfile in this path
+      command: sudo docker image build -t helloappjar /home/ubuntu/deploy-hellojar/deploymentconfig
+
+    - name: docker-compose-up helloappjar
+      command: sudo docker-compose --env-file /home/ubuntu/deploy-hellojar/deploymentconfig/helloappjar.settings.qa.env -f /home/ubuntu/deploy-hellojar/deploymentconfig/helloappjar-docker-compose.yml up -d

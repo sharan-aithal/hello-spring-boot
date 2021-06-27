@@ -1,0 +1,29 @@
+version: '3.3'
+
+# Each dockerfile in the project folder is created to build image with the jar file
+# Go to each project where there is a dockerfile to build, and build each image using the command: docker image build -t imagename .
+
+# After building the image, to make these app containers up, use this command:
+    # docker-compose -f docker-compose-filename.yml --env-file /home/ubuntu/deploy-app/webappjar/webappjar.settings.qa.env up
+    # Values set in the shell environment override those set in the .env file
+    # And always the first priority for environment variable defined in the Compose file
+
+# To know the values getting set to the variables, use command: 
+    #docker-compose -f docker-compose-filename.yml --env-file /home/ubuntu/deploy-app/webappjar/webappjar.settings.qa.env config
+
+services:
+
+  # create helloappjar container
+  helloappjar:
+    image: helloappjar
+    container_name: ${containername}
+    ports:
+      - "${appjarhostport}:${appjarcontainerport}"
+    networks:
+      - webnet
+    restart: always
+
+networks:
+  webnet:
+    external:
+      name: webnet
