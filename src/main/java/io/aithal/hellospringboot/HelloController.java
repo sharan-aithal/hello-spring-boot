@@ -10,11 +10,11 @@ public class HelloController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public String home ( ) {
-        return "Hello World";
+        return "{\"message\": \"Hello World\"}";
     }
 
     @GetMapping(value = "/hello", produces = MediaType.APPLICATION_JSON_VALUE)
     public String hello ( @RequestParam(value = "name", defaultValue = "Stranger") String name ) {
-        return "Hello " + name;
+        return "{\"message\": \"Hello " + name + "\"}";
     }
 }
